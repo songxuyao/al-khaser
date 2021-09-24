@@ -3,6 +3,7 @@
 *.lo
 *.o
 *.obj
+*.exe
 
 # User-specific files
 *.suo
@@ -70,3 +71,5 @@ log.txt
 
 # Packages
 packages/
+.vs/
+
