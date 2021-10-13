@@ -10,21 +10,21 @@ int main(void)
 	BOOL	ENABLE_TLS_CHECKS = TRUE;
 	BOOL	ENABLE_DEBUG_CHECKS = TRUE;
 	BOOL	ENABLE_INJECTION_CHECKS = TRUE;
-	BOOL	ENABLE_GEN_SANDBOX_CHECKS = TRUE;
-	BOOL	ENABLE_VBOX_CHECKS = TRUE;
-	BOOL	ENABLE_VMWARE_CHECKS = TRUE;
-	BOOL	ENABLE_VPC_CHECKS = TRUE;
-	BOOL	ENABLE_QEMU_CHECKS = TRUE;
-	BOOL	ENABLE_KVM_CHECKS = TRUE;
-	BOOL	ENABLE_XEN_CHECKS = TRUE;
-	BOOL	ENABLE_WINE_CHECKS = TRUE;
-	BOOL	ENABLE_PARALLELS_CHECKS = TRUE;
-	BOOL	ENABLE_HYPERV_CHECKS = TRUE;
-	BOOL	ENABLE_CODE_INJECTIONS = FALSE;
+	BOOL	ENABLE_GEN_SANDBOX_CHECKS = FALSE;
+	BOOL	ENABLE_VBOX_CHECKS = FALSE;
+	BOOL	ENABLE_VMWARE_CHECKS = FALSE;
+	BOOL	ENABLE_VPC_CHECKS = FALSE;
+	BOOL	ENABLE_QEMU_CHECKS = FALSE;
+	BOOL	ENABLE_KVM_CHECKS = FALSE;
+	BOOL	ENABLE_XEN_CHECKS = FALSE;
+	BOOL	ENABLE_WINE_CHECKS = FALSE;
+	BOOL	ENABLE_PARALLELS_CHECKS = FALSE;
+	BOOL	ENABLE_HYPERV_CHECKS = FALSE;
+	BOOL	ENABLE_CODE_INJECTIONS = TRUE;
 	BOOL	ENABLE_TIMING_ATTACKS = TRUE;
-	BOOL	ENABLE_DUMPING_CHECK = TRUE;
-	BOOL	ENABLE_ANALYSIS_TOOLS_CHECK = TRUE;
-	BOOL	ENABLE_ANTI_DISASSM_CHECKS = TRUE;
+	BOOL	ENABLE_DUMPING_CHECK = FALSE;
+	BOOL	ENABLE_ANALYSIS_TOOLS_CHECK = FALSE;
+	BOOL	ENABLE_ANTI_DISASSM_CHECKS = FALSE;
 	
 	/* Resize the console window for better visibility */
 	resize_console_window();
@@ -88,8 +88,8 @@ int main(void)
 		exec_check(&VirtualAlloc_WriteWatch_APICalls, TEXT("Checking VirtualAlloc write watch (API calls) "));
 		exec_check(&VirtualAlloc_WriteWatch_IsDebuggerPresent, TEXT("Checking VirtualAlloc write watch (IsDebuggerPresent) "));
 		exec_check(&VirtualAlloc_WriteWatch_CodeWrite, TEXT("Checking VirtualAlloc write watch (code write) "));
-		exec_check(&PageExceptionBreakpointCheck, TEXT("Checking for page exception breakpoints "));
 		exec_check(&ModuleBoundsHookCheck, TEXT("Checking for API hooks outside module bounds "));
+		exec_check(&PageExceptionBreakpointCheck, TEXT("Checking for page exception breakpoints "));
 		exec_check(&UnhandledExcepFilterTest, TEXT("Checking UnhandledExcepFilterTest "));
 	}
 
