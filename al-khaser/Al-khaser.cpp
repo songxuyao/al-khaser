@@ -10,21 +10,21 @@ int main(void)
 	BOOL	ENABLE_TLS_CHECKS = TRUE;
 	BOOL	ENABLE_DEBUG_CHECKS = TRUE;
 	BOOL	ENABLE_INJECTION_CHECKS = TRUE;
-	BOOL	ENABLE_GEN_SANDBOX_CHECKS = FALSE;
-	BOOL	ENABLE_VBOX_CHECKS = FALSE;
-	BOOL	ENABLE_VMWARE_CHECKS = FALSE;
-	BOOL	ENABLE_VPC_CHECKS = FALSE;
-	BOOL	ENABLE_QEMU_CHECKS = FALSE;
-	BOOL	ENABLE_KVM_CHECKS = FALSE;
-	BOOL	ENABLE_XEN_CHECKS = FALSE;
-	BOOL	ENABLE_WINE_CHECKS = FALSE;
-	BOOL	ENABLE_PARALLELS_CHECKS = FALSE;
-	BOOL	ENABLE_HYPERV_CHECKS = FALSE;
-	BOOL	ENABLE_CODE_INJECTIONS = TRUE;
+	BOOL	ENABLE_GEN_SANDBOX_CHECKS = TRUE;
+	BOOL	ENABLE_VBOX_CHECKS = TRUE;
+	BOOL	ENABLE_VMWARE_CHECKS = TRUE;
+	BOOL	ENABLE_VPC_CHECKS = TRUE;
+	BOOL	ENABLE_QEMU_CHECKS = TRUE;
+	BOOL	ENABLE_KVM_CHECKS = TRUE;
+	BOOL	ENABLE_XEN_CHECKS = TRUE;
+	BOOL	ENABLE_WINE_CHECKS = TRUE;
+	BOOL	ENABLE_PARALLELS_CHECKS = TRUE;
+	BOOL	ENABLE_HYPERV_CHECKS = TRUE;
+	BOOL	ENABLE_CODE_INJECTIONS = FALSE;
 	BOOL	ENABLE_TIMING_ATTACKS = TRUE;
-	BOOL	ENABLE_DUMPING_CHECK = FALSE;
-	BOOL	ENABLE_ANALYSIS_TOOLS_CHECK = FALSE;
-	BOOL	ENABLE_ANTI_DISASSM_CHECKS = FALSE;
+	BOOL	ENABLE_DUMPING_CHECK = TRUE;
+	BOOL	ENABLE_ANALYSIS_TOOLS_CHECK = TRUE;
+	BOOL	ENABLE_ANTI_DISASSM_CHECKS = TRUE;
 	
 	/* Resize the console window for better visibility */
 	resize_console_window();
@@ -68,6 +68,8 @@ int main(void)
 		exec_check(&WUDF_IsUserDebuggerPresent, TEXT("Checking WudfIsUserDebuggerPresent API "));
 		exec_check(&NtSetInformationThread_ThreadHideFromDebugger, TEXT("Checking NtSetInformationThread with ThreadHideFromDebugger "));
 		exec_check(&CloseHandle_InvalideHandle, TEXT("Checking CloseHandle with an invalide handle "));
+		exec_check(&NtSystemDebugControl_Command, TEXT("Checking NtSystemDebugControl"));
+		exec_check(&UnhandledExcepFilterTest, TEXT("Checking UnhandledExcepFilterTest "));
 		exec_check(&OutputDebugStringAPI, TEXT("Checking OutputDebugString "));
 		exec_check(&HardwareBreakpoints, TEXT("Checking Hardware Breakpoints "));
 		exec_check(&SoftwareBreakpoints, TEXT("Checking Software Breakpoints "));
@@ -88,9 +90,8 @@ int main(void)
 		exec_check(&VirtualAlloc_WriteWatch_APICalls, TEXT("Checking VirtualAlloc write watch (API calls) "));
 		exec_check(&VirtualAlloc_WriteWatch_IsDebuggerPresent, TEXT("Checking VirtualAlloc write watch (IsDebuggerPresent) "));
 		exec_check(&VirtualAlloc_WriteWatch_CodeWrite, TEXT("Checking VirtualAlloc write watch (code write) "));
-		exec_check(&ModuleBoundsHookCheck, TEXT("Checking for API hooks outside module bounds "));
 		exec_check(&PageExceptionBreakpointCheck, TEXT("Checking for page exception breakpoints "));
-		exec_check(&UnhandledExcepFilterTest, TEXT("Checking UnhandledExcepFilterTest "));
+		exec_check(&ModuleBoundsHookCheck, TEXT("Checking for API hooks outside module bounds "));
 	}
 
 	if (ENABLE_INJECTION_CHECKS) {
@@ -241,7 +242,7 @@ int main(void)
 	if (ENABLE_PARALLELS_CHECKS) {
 		print_category(TEXT("Paralles Detection"));
 		parallels_process();
-		exec_check(&parallels_check_mac, TEXT("Checking Mac Address start with 08:1C:42 "));
+		exec_check(&parallels_check_mac, TEXT("Checking Mac Address start with 00:1C:42 "));
 	}
 
 	if (ENABLE_HYPERV_CHECKS) {
@@ -298,6 +299,10 @@ int main(void)
 		AntiDisassmFunctionPointer();
 		_tprintf(_T("Begin AntiDisassmReturnPointerAbuse\n"));
 		AntiDisassmReturnPointerAbuse();
+#ifndef _WIN64
+		_tprintf(_T("Begin AntiDisassmSEHMisuse\n"));
+		AntiDisassmSEHMisuse();
+#endif
 	}
 
 	/* Anti Dumping */
